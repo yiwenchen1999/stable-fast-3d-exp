@@ -55,7 +55,7 @@ def _log_sf3d_camera_config(
     c2w_np = c2w.detach().cpu().numpy()
     k_np = intrinsic.detach().cpu().numpy()
     kn_np = intrinsic_normed.detach().cpu().numpy()
-    fmt = dict(precision=6, suppress=True)
+    fmt = dict(precision=6, suppress_small=True)
     print(
         "[SF3D] conditioning camera (fixed training prior; not estimated from image):\n"
         f"  batch_size={batch_size}\n"
