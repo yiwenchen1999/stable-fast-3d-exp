@@ -41,6 +41,35 @@ except ImportError:
     raise ImportError("texture_baker not found")
 
 
+def _log_sf3d_camera_config(
+    cfg: Any,
+    c2w: Tensor,
+    intrinsic: Tensor,
+    intrinsic_normed: Tensor,
+    batch_size: int,
+) -> None:
+    """Log canonical conditioning camera (stdout). Disable with SF3D_LOG_CAMERA=0."""
+    env = os.environ.get("SF3D_LOG_CAMERA", "1").lower()
+    if env in ("0", "false", "no"):
+        return
+    c2w_np = c2w.detach().cpu().numpy()
+    k_np = intrinsic.detach().cpu().numpy()
+    kn_np = intrinsic_normed.detach().cpu().numpy()
+    fmt = dict(precision=6, suppress=True)
+    print(
+        "[SF3D] conditioning camera (fixed training prior; not estimated from image):\n"
+        f"  batch_size={batch_size}\n"
+        f"  cond_image_size={cfg.cond_image_size}\n"
+        f"  default_fovy_deg={cfg.default_fovy_deg}\n"
+        f"  default_distance={cfg.default_distance}\n"
+        f"  background_color={cfg.background_color}\n"
+        f"  c2w_cond (4x4):\n{np.array2string(c2w_np, **fmt)}\n"
+        f"  intrinsic_cond (3x3):\n{np.array2string(k_np, **fmt)}\n"
+        f"  intrinsic_normed_cond (3x3):\n{np.array2string(kn_np, **fmt)}",
+        flush=True,
+    )
+
+
 class SF3D(BaseModule):
     @dataclass
     class Config(BaseModule.Config):
@@ -282,6 +311,14 @@ class SF3D(BaseModule):
             .view(1, 1, 3, 3)
             .repeat(batch_size, 1, 1, 1),
         }
+
+        _log_sf3d_camera_config(
+            self.cfg,
+            c2w_cond,
+            intrinsic,
+            intrinsic_normed_cond,
+            batch_size,
+        )
 
         meshes, global_dict = self.generate_mesh(
             batch, bake_resolution, remesh, vertex_count, estimate_illumination
