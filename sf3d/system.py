@@ -49,8 +49,8 @@ class SF3D(BaseModule):
         isosurface_threshold: float = 10.0
         radius: float = 1.0
         background_color: list[float] = field(default_factory=lambda: [0.5, 0.5, 0.5])
-        default_fovy_deg: float = 40.0
-        default_distance: float = 1.6
+        default_fovy_deg: float = 30.0
+        default_distance: float = 1.0
 
         camera_embedder_cls: str = ""
         camera_embedder: dict = field(default_factory=dict)
