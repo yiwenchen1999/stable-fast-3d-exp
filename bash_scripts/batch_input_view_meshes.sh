@@ -16,10 +16,7 @@
 #   PYTHON      interpreter (default python)
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
-
-INPUT_ROOT="${INPUT_ROOT:-$SCRIPT_DIR/inputs/objaverse}"
+INPUT_ROOT="${INPUT_ROOT:-~/stable-fast-3d-exp/inputs/objaverse}"
 DEVICE="${DEVICE:-}"
 TEXTURE="${TEXTURE:-1024}"
 PRETRAINED="${PRETRAINED:-stabilityai/stable-fast-3d}"
