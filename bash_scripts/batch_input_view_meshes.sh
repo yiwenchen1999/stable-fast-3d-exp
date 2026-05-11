@@ -16,7 +16,7 @@
 #   PYTHON      interpreter (default python)
 set -euo pipefail
 
-INPUT_ROOT="${INPUT_ROOT:-~/stable-fast-3d-exp/inputs/objaverse}"
+INPUT_ROOT="${INPUT_ROOT:-/home/yiwen/stable-fast-3d-exp/inputs/objaverse}"
 DEVICE="${DEVICE:-}"
 TEXTURE="${TEXTURE:-1024}"
 PRETRAINED="${PRETRAINED:-stabilityai/stable-fast-3d}"
